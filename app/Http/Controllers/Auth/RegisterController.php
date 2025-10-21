@@ -18,6 +18,7 @@ class RegisterController extends Controller
             'email'=>'morteza167@gmail.com',
             'password'=>12354687654
         ];
+        $user = User::create($validatedData);
 
         $user = User::whereEmail('morteza167@gmail.com')->first();
         SendVerificationEmailJob::dispatch($user);
