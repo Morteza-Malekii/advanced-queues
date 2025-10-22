@@ -28,6 +28,10 @@ class Order extends Model
     {
         $this->update(['status' => OrderStatus::CANCELED]);
     }
+    public function markAsComleted()
+    {
+        $this->update(['status' => OrderStatus::COMPLETED]);
+    }
 
     public function olderThan($minutes): bool
     {
