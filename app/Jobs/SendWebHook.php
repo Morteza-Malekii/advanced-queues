@@ -17,7 +17,7 @@ class SendWebHook implements ShouldQueue
      */
     public function __construct(public string $url, public $data, public Order $order)
     {
-        //
+        $this->onQueue('send-webhook');
     }
     public $tries = 3;
     /**

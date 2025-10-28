@@ -23,6 +23,6 @@ class CheckoutController extends Controller
         SendWebHook::dispatch('https://webhook.site/f2c0aa32-a9e3-4f02-ae1e-0b4575b243ec', [
             'price' => 1000,
             'name'=> 'morteza maleki'
-        ],$order);
+        ],$order)->delay(now()->addSecond(30));
     }
 }
