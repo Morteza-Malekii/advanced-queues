@@ -233,6 +233,14 @@ return [
             'tries' => 5,
             'timeout' => 60,
             ],
+            'supervisor-video-convert' => [
+            'connection' => 'redis',
+            'queue' => ['video-convert'],
+            'balance' => 'simple',
+            'processes'  => 2,
+            'tries' => 5,
+            'timeout' => 3600,
+            ],
         ],
     ],
 ];
