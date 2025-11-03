@@ -235,7 +235,7 @@ return [
             ],
             'supervisor-video-convert' => [
             'connection' => 'redis',
-            'queue' => ['video-convert'],
+            'queue' => ['video-convert','notif-queue'],
             'balance' => 'simple',
             'processes'  => 2,
             'tries' => 5,
