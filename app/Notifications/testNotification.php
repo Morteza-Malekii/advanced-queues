@@ -3,11 +3,14 @@
 namespace App\Notifications;
 
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldBeEncrypted;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\RateLimiter;
 
-class testNotification extends Notification implements ShouldQueue
+class testNotification extends Notification implements ShouldQueue, ShouldBeEncrypted
 {
     use Queueable;
 
@@ -53,5 +56,19 @@ class testNotification extends Notification implements ShouldQueue
         return [
             'message'  => "User #{$this->userName} khosh galdin",
         ];
+    }
+
+    public function shouldSend($notifiable, $channel)
+    {
+        $key = sprintf('notif:%s:%s:user:%s', static::class, $channel, $notifiable->id);
+
+        // if(RateLimiter::tooManyAttempts($key, 1))
+        // {
+        //     return false;
+        // }
+        // RateLimiter::hit($key, 2*60);
+        // return true;
+
+        return RateLimiter::attempt($key, $maxAttempts = 2, function(){}, $decaySeconds = 120);
     }
 }
