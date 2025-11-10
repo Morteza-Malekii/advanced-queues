@@ -2,6 +2,7 @@
 
 namespace App\Notifications;
 
+use Illuminate\Broadcasting\Channel;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeEncrypted;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -60,6 +61,7 @@ class testNotification extends Notification implements ShouldQueue, ShouldBeEncr
 
     public function shouldSend($notifiable, $channel)
     {
+        if($channel !== 'mail') return true;
         $key = sprintf('notif:%s:%s:user:%s', static::class, $channel, $notifiable->id);
 
         // if(RateLimiter::tooManyAttempts($key, 1))
