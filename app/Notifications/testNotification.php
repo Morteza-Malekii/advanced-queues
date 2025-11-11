@@ -64,13 +64,6 @@ class testNotification extends Notification implements ShouldQueue, ShouldBeEncr
         if($channel !== 'mail') return true;
         $key = sprintf('notif:%s:%s:user:%s', static::class, $channel, $notifiable->id);
 
-        // if(RateLimiter::tooManyAttempts($key, 1))
-        // {
-        //     return false;
-        // }
-        // RateLimiter::hit($key, 2*60);
-        // return true;
-
         return RateLimiter::attempt($key, $maxAttempts = 2, function(){}, $decaySeconds = 120);
     }
 }
