@@ -241,6 +241,14 @@ return [
             'tries' => 5,
             'timeout' => 3600,
             ],
+            'supervisor-notifications' => [
+            'connection' => 'redis',
+            'queue' => ['notifications'],
+            'balance' => 'simple',
+            'processes'  => 2,
+            'tries' => 5,
+            'timeout' => 3600,
+            ],
         ],
     ],
 ];
