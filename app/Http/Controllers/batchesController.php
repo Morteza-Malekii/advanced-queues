@@ -38,8 +38,6 @@ class batchesController extends Controller
                 'processed'     => $batch->processedJobs(),
                 'progress'      => $batch->progress(),
                 'exception'     => $e->getMessage(),
-                // اگر خواستی:
-                // 'trace'      => $e->getTraceAsString(),
             ]);
         })
         ->dispatch();
