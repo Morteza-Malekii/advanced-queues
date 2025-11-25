@@ -44,6 +44,7 @@ class batchesController extends Controller
                 'exception'     => $e->getMessage(),
             ]);
         })
+        ->allowFailures()
         ->name('kampein yalda')
         ->dispatch();
 
