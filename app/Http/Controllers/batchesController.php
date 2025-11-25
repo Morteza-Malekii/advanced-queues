@@ -15,14 +15,18 @@ class batchesController extends Controller
 {
    public function batch()
       {
+        $campaign = Bus::findBatch('a07122c3-b30a-4bd0-b320-87264c5c05ee');
+        // dd($campaign->progress());
+        $campaign->cancel();
+
         $path = '/storage/12.mp4';
         $jobs = collect();
         $users = User::all();
-        foreach ($users->take(20) as $user) {
+        foreach ($users->take(40) as $user) {
             $jobs->push(new campainJob($user));
         }
 
-        Bus::batch([
+        $bachData = Bus::batch([
             ...$jobs,
             new VideoConvertorJob($path),
             function (){
@@ -40,6 +44,10 @@ class batchesController extends Controller
                 'exception'     => $e->getMessage(),
             ]);
         })
+        ->name('kampein yalda')
         ->dispatch();
+
+        return $bachData;
+
       }
 }

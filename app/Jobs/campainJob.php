@@ -7,6 +7,7 @@ use App\Notifications\yaldaNotification;
 use Illuminate\Bus\Batchable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
+use Illuminate\Queue\Middleware\SkipIfBatchCancelled;
 
 class campainJob implements ShouldQueue
 {
@@ -30,6 +31,10 @@ class campainJob implements ShouldQueue
     {
         //
     }
+    public function middleware()
+    {
+        return [new SkipIfBatchCancelled];
+    }
 
     /**
      * Execute the job.
@@ -37,7 +42,6 @@ class campainJob implements ShouldQueue
     public function handle(): void
     {
         sleep(3);
-        
         $this->user->notify(new yaldaNotification($this->key));
         if ($this->attempts()< $this->tries){
             $this->release(now()->addMinute(2));

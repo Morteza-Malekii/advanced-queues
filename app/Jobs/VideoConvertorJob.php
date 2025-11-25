@@ -7,13 +7,14 @@ use Illuminate\Bus\Batchable;
 use Illuminate\Contracts\Queue\ShouldBeEncrypted;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
+use Illuminate\Queue\Middleware\SkipIfBatchCancelled;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
 
 class VideoConvertorJob implements ShouldQueue, ShouldBeEncrypted
 {
     use Queueable, SerializesModels, Batchable;
-
+    public $tries = 2;
     /**
      * Create a new job instance.
      */
@@ -21,8 +22,11 @@ class VideoConvertorJob implements ShouldQueue, ShouldBeEncrypted
     {
         $this->onQueue('video-convert');
     }
-    public $tries = 2;
 
+    public function middleware()
+    {
+        return [new SkipIfBatchCancelled];
+    }
     /**
      * Execute the job.
      */
