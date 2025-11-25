@@ -2,6 +2,8 @@
 
 namespace App\Jobs;
 
+use Exception;
+use Illuminate\Bus\Batchable;
 use Illuminate\Contracts\Queue\ShouldBeEncrypted;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
@@ -10,7 +12,7 @@ use Illuminate\Support\Facades\Log;
 
 class VideoConvertorJob implements ShouldQueue, ShouldBeEncrypted
 {
-    use Queueable, SerializesModels;
+    use Queueable, SerializesModels, Batchable;
 
     /**
      * Create a new job instance.
@@ -19,12 +21,20 @@ class VideoConvertorJob implements ShouldQueue, ShouldBeEncrypted
     {
         $this->onQueue('video-convert');
     }
+    public $tries = 2;
 
     /**
      * Execute the job.
      */
     public function handle(): void
     {
-        Log::info('this is a vedeo convrtor! video located in '.$this->path);
+        try {
+            throw new Exception();
+            Log::info('this is a vedeo convrtor! video located in '.$this->path);
+        } catch (\Throwable $e) {
+            if($this->attempts() < 3){
+                $this->release(10);
+            }
+        }
     }
 }
