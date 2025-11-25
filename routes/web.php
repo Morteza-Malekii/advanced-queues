@@ -21,3 +21,4 @@ Route::get('/testnotif',[testNotificationController::class,'index']);
 Route::get('/slack',[SlackController::class,'sendSlack']);
 Route::get('/campain',[CampainController::class,'yalda']);
 Route::get('/batch',[batchesController::class,'batch']);
+Route::get('/monitor/{id}',[batchesController::class,'campaignMonitor']);

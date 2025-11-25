@@ -15,9 +15,9 @@ class batchesController extends Controller
 {
    public function batch()
       {
-        $campaign = Bus::findBatch('a07122c3-b30a-4bd0-b320-87264c5c05ee');
+        // $campaign = Bus::findBatch('a07122c3-b30a-4bd0-b320-87264c5c05ee');
         // dd($campaign->progress());
-        $campaign->cancel();
+        // $campaign->cancel();
 
         $path = '/storage/12.mp4';
         $jobs = collect();
@@ -34,21 +34,28 @@ class batchesController extends Controller
         }
         ])->onQueue('notifications')
           ->catch(function(Batch $batch, Throwable $e){
-            Log::info('Batch failed', [
-                'batch_id'      => $batch->id,
-                'total_jobs'    => $batch->totalJobs,
-                'failed_jobs'   => $batch->failedJobs,
-                'failed_ids'    => $batch->failedJobIds,
-                'processed'     => $batch->processedJobs(),
-                'progress'      => $batch->progress(),
-                'exception'     => $e->getMessage(),
-            ]);
         })
         ->allowFailures()
-        ->name('kampein yalda')
+        ->name('kampaign yalda')
         ->dispatch();
 
         return $bachData;
 
+      }
+
+      public function campaignMonitor($batchId)
+      {
+        $batch = Bus::findBatch($batchId);
+        return response()->json([
+            'batch_id'       => $batch->id,
+            'batch_name'     => $batch->name,
+            'progress'       => $batch->progress(),
+            'total_jobs'     => $batch->totalJobs,
+            'failed_jobs'    => $batch->failedJobs,
+            'failed_ids'     => $batch->failedJobIds,
+            'processed_jobs' => $batch->processedJobs(),
+            'allows_fails'   => $batch->allowsFailures(),
+            'is_cancelled'   => $batch->canceled(),
+        ]);
       }
 }
