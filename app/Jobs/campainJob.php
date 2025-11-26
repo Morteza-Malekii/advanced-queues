@@ -43,9 +43,9 @@ class campainJob implements ShouldQueue
     {
         sleep(3);
         $this->user->notify(new yaldaNotification($this->key));
-        if ($this->attempts()< $this->tries){
-            $this->release(now()->addMinute(2));
-        }
+        // if ($this->attempts()< $this->tries){
+        //     $this->release(now()->addMinute(2));
+        // }
     }
 
     // public function tags(): array

@@ -8,7 +8,7 @@
 </head>
 <body>
     <h1>
-        <?= $user->name; ?> Welcome to MRT-TEAM
+        Welcome to MRT-TEAM
     </h1>
 
 </body>

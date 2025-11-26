@@ -3,12 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Jobs\campainJob;
+use App\Jobs\SendVerificationEmailJob;
 use App\Jobs\VideoConvertorJob;
+use App\Mail\NewVerificationEmail;
 use App\Models\User;
 use Illuminate\Bus\Batch;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Throwable;
 
 class batchesController extends Controller
@@ -28,12 +31,25 @@ class batchesController extends Controller
 
         $bachData = Bus::batch([
             ...$jobs,
+            function (){
+            Log::info('first chain is run!');
+        },
             new VideoConvertorJob($path),
             function (){
-            Log::info('chain is run!');
+            Log::info('second chain is run!');
+        },
+            function (){
+            Log::info('third chain is run!');
         }
         ])->onQueue('notifications')
+        ->then(function(Batch $batch){
+
+        })
           ->catch(function(Batch $batch, Throwable $e){
+            Log::error($batch->name . 'has failed');
+        })
+        ->finally(function(){
+            Mail::to('morteza167@gmail.com')->send(new NewVerificationEmail());
         })
         ->allowFailures()
         ->name('kampaign yalda')

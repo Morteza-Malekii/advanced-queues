@@ -33,7 +33,7 @@ class VideoConvertorJob implements ShouldQueue, ShouldBeEncrypted
     public function handle(): void
     {
         try {
-            // throw new Exception();
+            throw new Exception();
             Log::info('this is a vedeo convrtor! video located in '.$this->path);
         } catch (\Throwable $e) {
             if($this->attempts() < 3){
