@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\addJobToBatch;
 use App\Jobs\campainJob;
 use App\Jobs\SendVerificationEmailJob;
 use App\Jobs\VideoConvertorJob;
@@ -62,6 +63,11 @@ class batchesController extends Controller
       public function campaignMonitor($batchId)
       {
         $batch = Bus::findBatch($batchId);
+        if ($batch && ! $batch->cancelled() && ! $batch->finished()) {
+            $batch->add([
+            new addJobToBatch()
+            ]);
+        }
         return response()->json([
             'batch_id'       => $batch->id,
             'batch_name'     => $batch->name,

@@ -245,7 +245,7 @@ return [
             'connection' => 'redis',
             'queue' => ['notifications'],
             'balance' => 'simple',
-            'processes'  => 20,
+            'processes'  => 3,
             'tries' => 5,
             'timeout' => 60,
             ],
